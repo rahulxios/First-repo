@@ -64,26 +64,13 @@ async def start(bot, m: Message):
         TOTAL_USERS.append(user_id)
     user = await bot.get_me()
 
-    # Line 67-73 को हटाकर इससे बदलें:
-mention = user.mention
-
-# User profile picture code
-try:
-    profile_photos = await bot.get_user_profile_photos(m.from_user.id, limit=1)
-    if profile_photos.total_count > 0:
-        photo_file_id = profile_photos.photos[0][-1].file_id
-        user_photo = photo_file_id
-    else:
-        user_photo = "https://iili.io/KuCBoV2.jpg"
-except:
-    user_photo = "https://iili.io/KuCBoV2.jpg"
-
-caption = f"🌟 Welcome {m.from_user.mention} ! 🌟"
-start_message = await bot.send_photo(
-    chat_id=m.chat.id,
-    photo=user_photo,
-    caption=caption
-)
+    mention = user.mention
+    caption = f"🌟 Welcome {m.from_user.mention} ! 🌟"
+    start_message = await bot.send_photo(
+        chat_id=m.chat.id,
+        photo="https://iili.io/KuCBoV2.jpg",
+        caption=caption
+    )
 
     await asyncio.sleep(1)
     await start_message.edit_text(
@@ -119,7 +106,7 @@ start_message = await bot.send_photo(
             [InlineKeyboardButton("✨ Commands", callback_data="cmd_command")],
             [InlineKeyboardButton("💎 Features", callback_data="feat_command"), InlineKeyboardButton("⚙️ Settings", callback_data="setttings")],
             [InlineKeyboardButton("💳 Plans", callback_data="upgrade_command")],
-            [InlineKeyboardButton(text="📞 Contact", url=f"tg://openmessage?user_id={OWNER}"), 
+            [InlineKeyboardButton(text="📞 Contact", url=f"tg://openmessage?user_id={OWNER}"), InlineKeyboardButton(text="🛠️ Repo", url="https://github.com/nikhilsainiop/saini-txt-direct")],
         ])
         
         await start_message.edit_text(
@@ -134,7 +121,7 @@ start_message = await bot.send_photo(
             [InlineKeyboardButton("✨ Commands", callback_data="cmd_command")],
             [InlineKeyboardButton("💎 Features", callback_data="feat_command"), InlineKeyboardButton("⚙️ Settings", callback_data="setttings")],
             [InlineKeyboardButton("💳 Plans", callback_data="upgrade_command")],
-            [InlineKeyboardButton(text="📞 Contact", url=f"tg://openmessage?user_id={OWNER}"),
+            [InlineKeyboardButton(text="📞 Contact", url=f"tg://openmessage?user_id={OWNER}"), InlineKeyboardButton(text="🛠️ Repo", url="https://github.com/nikhilsainiop/saini-txt-direct")],
         ])
         await start_message.edit_text(
            f" 🎉 Welcome {m.from_user.first_name} to DRM Bot! 🎉\n\n"
@@ -152,7 +139,7 @@ async def back_to_main_menu(client, callback_query):
             [InlineKeyboardButton("✨ Commands", callback_data="cmd_command")],
             [InlineKeyboardButton("💎 Features", callback_data="feat_command"), InlineKeyboardButton("⚙️ Settings", callback_data="setttings")],
             [InlineKeyboardButton("💳 Plans", callback_data="upgrade_command")],
-            [InlineKeyboardButton(text="📞 Contact", url=f"tg://openmessage?user_id={OWNER}"),
+            [InlineKeyboardButton(text="📞 Contact", url=f"tg://openmessage?user_id={OWNER}"), InlineKeyboardButton(text="🛠️ Repo", url="https://github.com/nikhilsainiop/saini-txt-direct")],
         ])
     
     await callback_query.message.edit_media(
