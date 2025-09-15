@@ -62,266 +62,45 @@ async def start(bot, m: Message):
     user_id = m.chat.id
     if user_id not in TOTAL_USERS:
         TOTAL_USERS.append(user_id)
-    
-    # यूज़र की प्रोफ़ाइल फ़ोटो प्राप्त करने का प्रयास करें
-    photo_to_send = "https://iili.io/KuCBoV2.jpg"  # डिफ़ॉल्ट फ़ोटो
-    try:
-        # यूज़र की पहली प्रोफ़ाइल फ़ोटो प्राप्त करें
-        async for photo in bot.get_chat_photos(user_id, limit=1):
-            photo_to_send = photo.file_id
-    except Exception as e:
-        # अगर फ़ोटो प्राप्त करने में कोई त्रुटि होती है, तो उसे प्रिंट करें और डिफ़ॉल्ट का उपयोग करें
-        print(f"प्रोफ़ाइल फ़ोटो प्राप्त नहीं कर सका: {e}")
+    user = await bot.get_me()
 
+    mention = user.mention
     caption = f"🌟 Welcome {m.from_user.mention} ! 🌟"
     start_message = await bot.send_photo(
         chat_id=m.chat.id,
-        photo=photo_to_send,
+        photo="https://iili.io/KuCBoV2.jpg",
         caption=caption
     )
 
-    # लोडिंग एनीमेशन के लिए edit_caption का उपयोग करें
     await asyncio.sleep(1)
-    await start_message.edit_caption(
-        f"🌟 Welcome {m.from_user.first_name}! 🌟
-
-" +
-        f"Initializing Uploader bot... 🤖
-
-"
-        f"Progress: [⬜️⬜️⬜️⬜️⬜️⬜️⬜️⬜️⬜️⬜️] 0%
-
-"
-    )
-    await asyncio.sleep(1)
-    await start_message.edit_caption(
-        f"🌟 Welcome {m.from_user.first_name}! 🌟
-
-" +
-        f"Loading features... ⏳
-
-"
-        f"Progress: [🟥🟥🟥⬜️⬜️⬜️⬜️⬜️⬜️⬜️] 25%
-
-"
-    )
-    await asyncio.sleep(1)
-    await start_message.edit_caption(
-        f"🌟 Welcome {m.from_user.first_name}! 🌟
-
-" +
-        f"This may take a moment, sit back and relax! 😊
-
-"
-        f"Progress: [🟧🟧🟧🟧🟧⬜️⬜️⬜️⬜️⬜️] 50%
-
-"
-    )
-    await asyncio.sleep(1)
-    await start_message.edit_caption(
-        f"🌟 Welcome {m.from_user.first_name}! 🌟
-
-" +
-        f"Checking subscription status... 🔍
-
-"
-        f"Progress: [🟨🟨🟨🟨🟨🟨🟨🟨⬜️⬜️] 75%
-
-"
-    )
-    await asyncio.sleep(1)
-
-    if m.chat.id in AUTH_USERS:
-@bot.on_message(filters.command("start"))
-async def start(bot, m: Message):
-    user_id = m.chat.id
-    if user_id not in TOTAL_USERS:
-        TOTAL_USERS.append(user_id)
-    
-    # यूज़र की प्रोफ़ाइल फ़ोटो प्राप्त करने का प्रयास करें
-    photo_to_send = "https://iili.io/KuCBoV2.jpg"  # डिफ़ॉल्ट फ़ोटो
-    try:
-        # यूज़र की पहली प्रोफ़ाइल फ़ोटो प्राप्त करें
-        async for photo in bot.get_chat_photos(user_id, limit=1):
-            photo_to_send = photo.file_id
-    except Exception as e:
-        # अगर फ़ोटो प्राप्त करने में कोई त्रुटि होती है, तो उसे प्रिंट करें और डिफ़ॉल्ट का उपयोग करें
-        print(f"प्रोफ़ाइल फ़ोटो प्राप्त नहीं कर सका: {e}")
-
-    caption = f"🌟 Welcome {m.from_user.mention} ! 🌟"
-    start_message = await bot.send_photo(
-        chat_id=m.chat.id,
-        photo=photo_to_send,
-        caption=caption
+    await start_message.edit_text(
+        f"🌟 Welcome {m.from_user.first_name}! 🌟\n\n" +
+        f"Initializing Uploader bot... 🤖\n\n"
+        f"Progress: [⬜️⬜️⬜️⬜️⬜️⬜️⬜️⬜️⬜️⬜️] 0%\n\n"
     )
 
-    # लोडिंग एनीमेशन के लिए edit_caption का उपयोग करें
     await asyncio.sleep(1)
-    await start_message.edit_caption(
-        f"🌟 Welcome {m.from_user.first_name}! 🌟
-
-" +
-        f"Initializing Uploader bot... 🤖
-
-"
-        f"Progress: [⬜️⬜️⬜️⬜️⬜️⬜️⬜️⬜️⬜️⬜️] 0%
-
-"
+    await start_message.edit_text(
+        f"🌟 Welcome {m.from_user.first_name}! 🌟\n\n" +
+        f"Loading features... ⏳\n\n"
+        f"Progress: [🟥🟥🟥⬜️⬜️⬜️⬜️⬜️⬜️⬜️] 25%\n\n"
     )
-    await asyncio.sleep(1)
-@bot.on_message(filters.command("start"))
-async def start(bot, m: Message):
-    user_id = m.chat.id
-    if user_id not in TOTAL_USERS:
-        TOTAL_USERS.append(user_id)
-    
-    # यूज़र की प्रोफ़ाइल फ़ोटो प्राप्त करने का प्रयास करें
-    photo_to_send = "https://iili.io/KuCBoV2.jpg"  # डिफ़ॉल्ट फ़ोटो
-    try:
-        # यूज़र की पहली प्रोफ़ाइल फ़ोटो प्राप्त करें
-        async for photo in bot.get_chat_photos(user_id, limit=1):
-            photo_to_send = photo.file_id
-    except Exception as e:
-        # अगर फ़ोटो प्राप्त करने में कोई त्रुटि होती है, तो उसे प्रिंट करें और डिफ़ॉल्ट का उपयोग करें
-        print(f"प्रोफ़ाइल फ़ोटो प्राप्त नहीं कर सका: {e}")
-
-    caption = f"🌟 Welcome {m.from_user.mention} ! 🌟"
-    start_message = await bot.send_photo(
-        chat_id=m.chat.id,
-        photo=photo_to_send,
-        caption=caption
-    )
-
-    # लोडिंग एनीमेशन के लिए edit_caption का उपयोग करें
-    await asyncio.sleep(1)
-    await start_message.edit_caption(
-        f"🌟 Welcome {m.from_user.first_name}! 🌟
-
-" +
-        f"Initializing Uploader bot... 🤖
-
-"
-        f"Progress: [⬜️⬜️⬜️⬜️⬜️⬜️⬜️⬜️⬜️⬜️] 0%
-
-"
-    )
-    await asyncio.sleep(1)
-    await start_message.edit_caption(
-        f"🌟 Welcome {m.from_user.first_name}! 🌟
-
-" +
-        f"Loading features... ⏳
-
-"
-        f"Progress: [🟥🟥🟥⬜️⬜️⬜️⬜️⬜️⬜️⬜️] 25%
-
-"
-    )
-    await asyncio.sleep(1)
-    await start_message.edit_caption(
-        f"🌟 Welcome {m.from_user.first_name}! 🌟
-
-" +
-        f"This may take a moment, sit back and relax! 😊
-
-"
-        f"Progress: [🟧🟧🟧🟧🟧⬜️⬜️⬜️⬜️⬜️] 50%
-
-"
-    )
-    await asyncio.sleep(1)
-    await start_message.edit_caption(
-        f"🌟 Welcome {m.from_user.first_name}! 🌟
-
-" +
-        f"Checking subscription status... 🔍
-
-"
-        f"Progress: [🟨🟨🟨🟨🟨🟨🟨🟨⬜️⬜️] 75%
-
-"
-    )
-    await asyncio.sleep(1)
-
-@bot.on_message(filters.command("start"))
-async def start(bot, m: Message):
-    user_id = m.chat.id
-    if user_id not in TOTAL_USERS:
-        TOTAL_USERS.append(user_id)
-    
-    photo_to_send = "https://iili.io/KuCBoV2.jpg"  # डिफ़ॉल्ट फ़ोटो
-    try:
-        async for photo in bot.get_chat_photos(user_id, limit=1):
-            photo_to_send = photo.file_id
-    except Exception as e:
-        print(f"प्रोफ़ाइल फ़ोटो प्राप्त नहीं कर सका: {e}")
-
-    caption = f"🌟 Welcome {m.from_user.mention} ! 🌟"
-    start_message = await bot.send_photo(
-        chat_id=m.chat.id,
-        photo=photo_to_send,
-        caption=caption
-    )
-
-    # लोडिंग एनीमेशन
-    await asyncio.sleep(1)
-    progress_caption = (
-        f"🌟 Welcome {m.from_user.first_name}! 🌟
-
-"
-        "Initializing Uploader bot... 🤖
-
-"
-        "Progress: [⬜️⬜️⬜️⬜️⬜️⬜️⬜️⬜️⬜️⬜️] 0%
-
-"
-    )
-    await start_message.edit_caption(progress_caption)
-
-    await asyncio.sleep(1)
-    progress_caption = (
-        f"🌟 Welcome {m.from_user.first_name}! 🌟
-
-"
-        "Loading features... ⏳
-
-"
-        "Progress: [🟥🟥🟥⬜️⬜️⬜️⬜️⬜️⬜️⬜️] 25%
-
-"
-    )
-    await start_message.edit_caption(progress_caption)
-
-    await asyncio.sleep(1)
-    progress_caption = (
-        f"🌟 Welcome {m.from_user.first_name}! 🌟
-
-"
-        "This may take a moment, sit back and relax! 😊
-
-"
-        "Progress: [🟧🟧🟧🟧🟧⬜️⬜️⬜️⬜️⬜️] 50%
-
-"
-    )
-    await start_message.edit_caption(progress_caption)
-
-    await asyncio.sleep(1)
-    progress_caption = (
-        f"🌟 Welcome {m.from_user.first_name}! 🌟
-
-"
-        "Checking subscription status... 🔍
-
-"
-        "Progress: [🟨🟨🟨🟨🟨🟨🟨🟨⬜️⬜️] 75%
-
-"
-    )
-    await start_message.edit_caption(progress_caption)
     
     await asyncio.sleep(1)
+    await start_message.edit_text(
+        f"🌟 Welcome {m.from_user.first_name}! 🌟\n\n" +
+        f"This may take a moment, sit back and relax! 😊\n\n"
+        f"Progress: [🟧🟧🟧🟧🟧⬜️⬜️⬜️⬜️⬜️] 50%\n\n"
+    )
 
+    await asyncio.sleep(1)
+    await start_message.edit_text(
+        f"🌟 Welcome {m.from_user.first_name}! 🌟\n\n" +
+        f"Checking subscription status... 🔍\n\n"
+        f"Progress: [🟨🟨🟨🟨🟨🟨🟨🟨⬜️⬜️] 75%\n\n"
+    )
+
+    await asyncio.sleep(1)
     if m.chat.id in AUTH_USERS:
         keyboard = InlineKeyboardMarkup([
             [InlineKeyboardButton("✨ Commands", callback_data="cmd_command")],
@@ -329,44 +108,13 @@ async def start(bot, m: Message):
             [InlineKeyboardButton("💳 Plans", callback_data="upgrade_command")],
             [InlineKeyboardButton(text="📞 Contact", url=f"tg://openmessage?user_id={OWNER}"), InlineKeyboardButton(text="🛠️ Repo", url="https://github.com/nikhilsainiop/saini-txt-direct")],
         ])
-        final_caption = (
-            f"🌟 Welcome {m.from_user.first_name}! 🌟
-
-"
-            "Great! You are a premium member!
-"
-            "Use button : **✨ Commands** to get started 🌟
-
-"
-            f"If you face any problem contact - [{CREDIT}](tg://openmessage?user_id={OWNER})
-"
+        
+        await start_message.edit_text(
+            f"🌟 Welcome {m.from_user.first_name}! 🌟\n\n" +
+            f"Great! You are a premium member!\n"
+            f"Use button : **✨ Commands** to get started 🌟\n\n"
+            f"If you face any problem contact -  [{CREDIT}⁬](tg://openmessage?user_id={OWNER})\n", disable_web_page_preview=True, reply_markup=keyboard
         )
-        await start_message.edit_caption(caption=final_caption, reply_markup=keyboard)
-    else:
-        await asyncio.sleep(2)
-        keyboard = InlineKeyboardMarkup([
-            [InlineKeyboardButton("✨ Commands", callback_data="cmd_command")],
-            [InlineKeyboardButton("💎 Features", callback_data="feat_command"), InlineKeyboardButton("⚙️ Settings", callback_data="setttings")],
-            [InlineKeyboardButton("💳 Plans", callback_data="upgrade_command")],
-            [InlineKeyboardButton(text="📞 Contact", url=f"tg://openmessage?user_id={OWNER}"), InlineKeyboardButton(text="🛠️ Repo", url="https://github.com/nikhilsainiop/saini-txt-direct")],
-        ])
-        final_caption = (
-            f" 🎉 Welcome {m.from_user.first_name} to DRM Bot! 🎉
-
-"
-            "**You are currently using the free version.** 🆓
-
-"
-            "... I'm here to make your life easier by downloading videos from your **.txt** file 📄 and uploading them directly to Telegram!
-
-"
-            "**Want to get started? Press /id**
-
-"
-            f"💬 Contact : [{CREDIT}](tg://openmessage?user_id={OWNER}) to Get The Subscription 🎫 and unlock the full potential of your new bot! 🔓
-"
-        )
-        await start_message.edit_caption(caption=final_caption, reply_markup=keyboard)
     else:
         await asyncio.sleep(2)
         keyboard = InlineKeyboardMarkup([
