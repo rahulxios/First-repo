@@ -68,9 +68,25 @@ async def start(bot, m: Message):
     caption = f"🌟 Welcome {m.from_user.mention} ! 🌟"
     start_message = await bot.send_photo(
         chat_id=m.chat.id,
-        photo="https://iili.io/KuCBoV2.jpg",
-        caption=caption
-    )
+                photos = await bot.get_profile_photos(m.from_user.id, limit=1)
+        if photos.total_count > 0:
+            photo_to_send = photos.photos[0].file_id
+        else:
+            photo_to_send = None
+    except Exception:
+        photo_to_send = None
+
+    if photo_to_send:
+        start_message = await bot.send_photo(
+            chat_id=m.chat.id,
+            photo=photo_to_send,
+            caption=caption
+        )
+    else:
+        start_message = await bot.send_message(
+            chat_id=m.chat.id,
+            text=caption
+        )
 
     await asyncio.sleep(1)
     await start_message.edit_text(
