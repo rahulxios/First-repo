@@ -243,6 +243,85 @@ async def start(bot, m: Message):
     )
     await asyncio.sleep(1)
 
+@bot.on_message(filters.command("start"))
+async def start(bot, m: Message):
+    user_id = m.chat.id
+    if user_id not in TOTAL_USERS:
+        TOTAL_USERS.append(user_id)
+    
+    photo_to_send = "https://iili.io/KuCBoV2.jpg"  # डिफ़ॉल्ट फ़ोटो
+    try:
+        async for photo in bot.get_chat_photos(user_id, limit=1):
+            photo_to_send = photo.file_id
+    except Exception as e:
+        print(f"प्रोफ़ाइल फ़ोटो प्राप्त नहीं कर सका: {e}")
+
+    caption = f"🌟 Welcome {m.from_user.mention} ! 🌟"
+    start_message = await bot.send_photo(
+        chat_id=m.chat.id,
+        photo=photo_to_send,
+        caption=caption
+    )
+
+    # लोडिंग एनीमेशन
+    await asyncio.sleep(1)
+    progress_caption = (
+        f"🌟 Welcome {m.from_user.first_name}! 🌟
+
+"
+        "Initializing Uploader bot... 🤖
+
+"
+        "Progress: [⬜️⬜️⬜️⬜️⬜️⬜️⬜️⬜️⬜️⬜️] 0%
+
+"
+    )
+    await start_message.edit_caption(progress_caption)
+
+    await asyncio.sleep(1)
+    progress_caption = (
+        f"🌟 Welcome {m.from_user.first_name}! 🌟
+
+"
+        "Loading features... ⏳
+
+"
+        "Progress: [🟥🟥🟥⬜️⬜️⬜️⬜️⬜️⬜️⬜️] 25%
+
+"
+    )
+    await start_message.edit_caption(progress_caption)
+
+    await asyncio.sleep(1)
+    progress_caption = (
+        f"🌟 Welcome {m.from_user.first_name}! 🌟
+
+"
+        "This may take a moment, sit back and relax! 😊
+
+"
+        "Progress: [🟧🟧🟧🟧🟧⬜️⬜️⬜️⬜️⬜️] 50%
+
+"
+    )
+    await start_message.edit_caption(progress_caption)
+
+    await asyncio.sleep(1)
+    progress_caption = (
+        f"🌟 Welcome {m.from_user.first_name}! 🌟
+
+"
+        "Checking subscription status... 🔍
+
+"
+        "Progress: [🟨🟨🟨🟨🟨🟨🟨🟨⬜️⬜️] 75%
+
+"
+    )
+    await start_message.edit_caption(progress_caption)
+    
+    await asyncio.sleep(1)
+
     if m.chat.id in AUTH_USERS:
         keyboard = InlineKeyboardMarkup([
             [InlineKeyboardButton("✨ Commands", callback_data="cmd_command")],
@@ -250,21 +329,19 @@ async def start(bot, m: Message):
             [InlineKeyboardButton("💳 Plans", callback_data="upgrade_command")],
             [InlineKeyboardButton(text="📞 Contact", url=f"tg://openmessage?user_id={OWNER}"), InlineKeyboardButton(text="🛠️ Repo", url="https://github.com/nikhilsainiop/saini-txt-direct")],
         ])
-        await start_message.edit_caption(
-            caption=(
-                f"🌟 Welcome {m.from_user.first_name}! 🌟
-
-" +
-                f"Great! You are a premium member!
-"
-                f"Use button : **✨ Commands** to get started 🌟
+        final_caption = (
+            f"🌟 Welcome {m.from_user.first_name}! 🌟
 
 "
-                f"If you face any problem contact - [{CREDIT}](tg://openmessage?user_id={OWNER})
+            "Great! You are a premium member!
 "
-            ),
-            reply_markup=keyboard
+            "Use button : **✨ Commands** to get started 🌟
+
+"
+            f"If you face any problem contact - [{CREDIT}](tg://openmessage?user_id={OWNER})
+"
         )
+        await start_message.edit_caption(caption=final_caption, reply_markup=keyboard)
     else:
         await asyncio.sleep(2)
         keyboard = InlineKeyboardMarkup([
@@ -273,25 +350,23 @@ async def start(bot, m: Message):
             [InlineKeyboardButton("💳 Plans", callback_data="upgrade_command")],
             [InlineKeyboardButton(text="📞 Contact", url=f"tg://openmessage?user_id={OWNER}"), InlineKeyboardButton(text="🛠️ Repo", url="https://github.com/nikhilsainiop/saini-txt-direct")],
         ])
-        await start_message.edit_caption(
-            caption=(
-                f" 🎉 Welcome {m.from_user.first_name} to DRM Bot! 🎉
+        final_caption = (
+            f" 🎉 Welcome {m.from_user.first_name} to DRM Bot! 🎉
 
 "
-                f"**You are currently using the free version.** 🆓
+            "**You are currently using the free version.** 🆓
 
 "
-                f"... I'm here to make your life easier by downloading videos from your **.txt** file 📄 and uploading them directly to Telegram!
+            "... I'm here to make your life easier by downloading videos from your **.txt** file 📄 and uploading them directly to Telegram!
 
 "
-                f"**Want to get started? Press /id**
+            "**Want to get started? Press /id**
 
 "
-                f"💬 Contact : [{CREDIT}](tg://openmessage?user_id={OWNER}) to Get The Subscription 🎫 and unlock the full potential of your new bot! 🔓
+            f"💬 Contact : [{CREDIT}](tg://openmessage?user_id={OWNER}) to Get The Subscription 🎫 and unlock the full potential of your new bot! 🔓
 "
-            ),
-            reply_markup=keyboard
         )
+        await start_message.edit_caption(caption=final_caption, reply_markup=keyboard)
     else:
         await asyncio.sleep(2)
         keyboard = InlineKeyboardMarkup([
