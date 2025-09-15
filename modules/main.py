@@ -132,6 +132,81 @@ async def start(bot, m: Message):
     await asyncio.sleep(1)
 
     if m.chat.id in AUTH_USERS:
+@bot.on_message(filters.command("start"))
+async def start(bot, m: Message):
+    user_id = m.chat.id
+    if user_id not in TOTAL_USERS:
+        TOTAL_USERS.append(user_id)
+    
+    # यूज़र की प्रोफ़ाइल फ़ोटो प्राप्त करने का प्रयास करें
+    photo_to_send = "https://iili.io/KuCBoV2.jpg"  # डिफ़ॉल्ट फ़ोटो
+    try:
+        # यूज़र की पहली प्रोफ़ाइल फ़ोटो प्राप्त करें
+        async for photo in bot.get_chat_photos(user_id, limit=1):
+            photo_to_send = photo.file_id
+    except Exception as e:
+        # अगर फ़ोटो प्राप्त करने में कोई त्रुटि होती है, तो उसे प्रिंट करें और डिफ़ॉल्ट का उपयोग करें
+        print(f"प्रोफ़ाइल फ़ोटो प्राप्त नहीं कर सका: {e}")
+
+    caption = f"🌟 Welcome {m.from_user.mention} ! 🌟"
+    start_message = await bot.send_photo(
+        chat_id=m.chat.id,
+        photo=photo_to_send,
+        caption=caption
+    )
+
+    # लोडिंग एनीमेशन के लिए edit_caption का उपयोग करें
+    await asyncio.sleep(1)
+    await start_message.edit_caption(
+        f"🌟 Welcome {m.from_user.first_name}! 🌟
+
+" +
+        f"Initializing Uploader bot... 🤖
+
+"
+        f"Progress: [⬜️⬜️⬜️⬜️⬜️⬜️⬜️⬜️⬜️⬜️] 0%
+
+"
+    )
+    await asyncio.sleep(1)
+    await start_message.edit_caption(
+        f"🌟 Welcome {m.from_user.first_name}! 🌟
+
+" +
+        f"Loading features... ⏳
+
+"
+        f"Progress: [🟥🟥🟥⬜️⬜️⬜️⬜️⬜️⬜️⬜️] 25%
+
+"
+    )
+    await asyncio.sleep(1)
+    await start_message.edit_caption(
+        f"🌟 Welcome {m.from_user.first_name}! 🌟
+
+" +
+        f"This may take a moment, sit back and relax! 😊
+
+"
+        f"Progress: [🟧🟧🟧🟧🟧⬜️⬜️⬜️⬜️⬜️] 50%
+
+"
+    )
+    await asyncio.sleep(1)
+    await start_message.edit_caption(
+        f"🌟 Welcome {m.from_user.first_name}! 🌟
+
+" +
+        f"Checking subscription status... 🔍
+
+"
+        f"Progress: [🟨🟨🟨🟨🟨🟨🟨🟨⬜️⬜️] 75%
+
+"
+    )
+    await asyncio.sleep(1)
+
+    if m.chat.id in AUTH_USERS:
         keyboard = InlineKeyboardMarkup([
             [InlineKeyboardButton("✨ Commands", callback_data="cmd_command")],
             [InlineKeyboardButton("💎 Features", callback_data="feat_command"), InlineKeyboardButton("⚙️ Settings", callback_data="setttings")],
@@ -180,7 +255,6 @@ async def start(bot, m: Message):
             ),
             reply_markup=keyboard
         )
-
     else:
         await asyncio.sleep(2)
         keyboard = InlineKeyboardMarkup([
