@@ -106,8 +106,7 @@ async def start(bot, m: Message):
             [InlineKeyboardButton("✨ Commands", callback_data="cmd_command")],
             [InlineKeyboardButton("💎 Features", callback_data="feat_command"), InlineKeyboardButton("⚙️ Settings", callback_data="setttings")],
             [InlineKeyboardButton("💳 Plans", callback_data="upgrade_command")],
-            [InlineKeyboardButton(text="📞 Contact", url=f"tg://openmessage?user_id={OWNER}"), InlineKeyboardButton(text="🛠️ Repo", url="https://github.com/nikhilsainiop/saini-txt-direct")],
-        ])
+            [InlineKeyboardButton(text="📞 Contact", url=f"tg://openmessage?user_id={OWNER}"),  ])
         
         await start_message.edit_text(
             f"🌟 Welcome {m.from_user.first_name}! 🌟\n\n" +
@@ -121,8 +120,7 @@ async def start(bot, m: Message):
             [InlineKeyboardButton("✨ Commands", callback_data="cmd_command")],
             [InlineKeyboardButton("💎 Features", callback_data="feat_command"), InlineKeyboardButton("⚙️ Settings", callback_data="setttings")],
             [InlineKeyboardButton("💳 Plans", callback_data="upgrade_command")],
-            [InlineKeyboardButton(text="📞 Contact", url=f"tg://openmessage?user_id={OWNER}"), InlineKeyboardButton(text="🛠️ Repo", url="https://github.com/nikhilsainiop/saini-txt-direct")],
-        ])
+            [InlineKeyboardButton(text="📞 Contact", url=f"tg://openmessage?user_id={OWNER}"),   ])
         await start_message.edit_text(
            f" 🎉 Welcome {m.from_user.first_name} to DRM Bot! 🎉\n\n"
            f"**You are currently using the free version.** 🆓\n\n<blockquote expandable>I'm here to make your life easier by downloading videos from your **.txt** file 📄 and uploading them directly to Telegram!</blockquote>\n\n**Want to get started? Press /id**\n\n💬 Contact : [{CREDIT}⁬](tg://openmessage?user_id={OWNER}) to Get The Subscription 🎫 and unlock the full potential of your new bot! 🔓\n", disable_web_page_preview=True, reply_markup=keyboard
@@ -139,12 +137,11 @@ async def back_to_main_menu(client, callback_query):
             [InlineKeyboardButton("✨ Commands", callback_data="cmd_command")],
             [InlineKeyboardButton("💎 Features", callback_data="feat_command"), InlineKeyboardButton("⚙️ Settings", callback_data="setttings")],
             [InlineKeyboardButton("💳 Plans", callback_data="upgrade_command")],
-            [InlineKeyboardButton(text="📞 Contact", url=f"tg://openmessage?user_id={OWNER}"), InlineKeyboardButton(text="🛠️ Repo", url="https://github.com/nikhilsainiop/saini-txt-direct")],
-        ])
+            [InlineKeyboardButton(text="📞 Contact", url=f"tg://openmessage?user_id={OWNER}"),   ])
     
     await callback_query.message.edit_media(
       InputMediaPhoto(
-        media="https://envs.sh/GVI.jpg",
+        media="https://i.postimg.cc/wvgBtnxM/backiee-218350-landscape.jpg",
         caption=caption
       ),
       reply_markup=keyboard
@@ -266,7 +263,7 @@ async def upgrade_button(client, callback_query):
     
   await callback_query.message.edit_media(
     InputMediaPhoto(
-      media="https://envs.sh/GVI.jpg",
+      media="https://i.postimg.cc/wvgBtnxM/backiee-218350-landscape.jpg",
       caption=caption
     ),
     reply_markup=keyboard
@@ -288,7 +285,7 @@ async def settings_button(client, callback_query):
 
     await callback_query.message.edit_media(
     InputMediaPhoto(
-      media="https://envs.sh/GVI.jpg",
+      media="https://i.postimg.cc/wvgBtnxM/backiee-218350-landscape.jpg",
       caption=caption
     ),
     reply_markup=keyboard
@@ -433,7 +430,7 @@ async def pdf_thumbnail_button(client, callback_query):
   caption = ("<b>⋅ This Feature is Not Working Yet ⋅</b>")
   await callback_query.message.edit_media(
     InputMediaPhoto(
-        media="https://envs.sh/GVI.jpg",
+        media="https://i.postimg.cc/wvgBtnxM/backiee-218350-landscape.jpg",
         caption=caption
     ),
     reply_markup=keyboard
@@ -537,7 +534,7 @@ async def pdf_watermark_button(client, callback_query):
   caption = ("<b>⋅ This Feature is Not Working Yet ⋅</b>")
   await callback_query.message.edit_media(
     InputMediaPhoto(
-        media="https://envs.sh/GVI.jpg",
+        media="https://i.postimg.cc/wvgBtnxM/backiee-218350-landscape.jpg",
         caption=caption
     ),
     reply_markup=keyboard
@@ -768,7 +765,7 @@ async def y2t_button(client, callback_query):
   caption = f"**YouTube Commands:**\n\n◆/y2t - 🔪 YouTube Playlist → .txt Converter\n◆/ytm - 🎶 YouTube → .mp3 downloader\n\n<blockquote><b>◆YouTube → .mp3 downloader\n01. Send YouTube Playlist.txt file\n02. Send single or multiple YouTube links set\neg.\n`https://www.youtube.com/watch?v=xxxxxx\nhttps://www.youtube.com/watch?v=yyyyyy`</b></blockquote>"
   await callback_query.message.edit_media(
     InputMediaPhoto(
-      media="https://envs.sh/GVi.jpg",
+      media="https://i.postimg.cc/wvgBtnxM/backiee-218350-landscape.jpg",
       caption=caption
       ),
       reply_markup=keyboard
@@ -781,7 +778,7 @@ async def y2t_button(client, callback_query):
   caption = f"**HTML Commands:**\n\n◆/t2h - 🌐 .txt → .html Converter"
   await callback_query.message.edit_media(
     InputMediaPhoto(
-      media="https://envs.sh/GVI.jpg",
+      media="https://i.postimg.cc/wvgBtnxM/backiee-218350-landscape.jpg",
       caption=caption
       ),
       reply_markup=keyboard
