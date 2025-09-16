@@ -107,7 +107,7 @@ async def start(bot, m: Message):
             [InlineKeyboardButton("💎 Features", callback_data="feat_command"), InlineKeyboardButton("⚙️ Settings", callback_data="setttings")],
             [InlineKeyboardButton("💳 Plans", callback_data="upgrade_command")],
             [InlineKeyboardButton(text="📞 Contact", url=f"tg://openmessage?user_id={OWNER}")],
-        ]))
+        ])
         
         await start_message.edit_text(
             f"🌟 Welcome {m.from_user.first_name}! 🌟\n\n" +
