@@ -18,6 +18,23 @@ from Crypto.Util.Padding import unpad
 from base64 import b64encode, b64decode
 from logs import logging
 from bs4 import BeautifulSoup
+from aiohttp import ClientSession
+from subprocess import getstatusoutput
+from pytube import YouTube
+from aiohttp import web
+import random
+from pyromod import listen
+from pyrogram import Client, filters
+from pyrogram.errors import FloodWait, PeerIdInvalid, UserIsBlocked, InputUserDeactivated
+from pyrogram.errors.exceptions.bad_request_400 import StickerEmojiInvalid
+from pyrogram.types.messages_and_media import message
+from pyrogram.types import InlineKeyboardButton, InlineKeyboardMarkup, Message, InputMediaPhoto
+import aiohttp
+import aiofiles
+import zipfile
+import shutil
+import ffmpeg
+
 import saini as helper
 import html_handler
 import globals
@@ -27,24 +44,7 @@ from text_handler import text_to_txt
 from youtube_handler import ytm_handler, y2t_handler, getcookies_handler, cookies_handler
 from utils import progress_bar
 from vars import API_ID, API_HASH, BOT_TOKEN, OWNER, CREDIT, AUTH_USERS, TOTAL_USERS, cookies_file_path
-from vars import api_url, api_token, token_cp, adda_token, photologo, photoyt, photocp, photozip
-from aiohttp import ClientSession
-from subprocess import getstatusoutput
-from pytube import YouTube
-from aiohttp import web
-import random
-from pyromod import listen
-from pyrogram import Client, filters
-from pyrogram.types import Message, InputMediaPhoto
-from pyrogram.errors import FloodWait, PeerIdInvalid, UserIsBlocked, InputUserDeactivated
-from pyrogram.errors.exceptions.bad_request_400 import StickerEmojiInvalid
-from pyrogram.types.messages_and_media import message
-from pyrogram.types import InlineKeyboardButton, InlineKeyboardMarkup
-import aiohttp
-import aiofiles
-import zipfile
-import shutil
-import ffmpeg
+from vars import api_url, api_token
 
 # .....,.....,.......,...,.......,....., .....,.....,.......,...,.......,.....,
 
