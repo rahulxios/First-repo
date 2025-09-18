@@ -38,3 +38,10 @@ async def text_to_txt(bot: Client, message: Message):
 # Define paths for uploaded file and processed file
 UPLOAD_FOLDER = '/path/to/upload/folder'
 EDITED_FILE_PATH = '/path/to/save/edited_output.txt'
+
+#========================================================================================================================
+def register_text_handlers(bot):
+    @bot.on_message(filters.command(["t2t"]))
+    async def call_text_to_txt(bot: Client, m: Message):
+        await text_to_txt(bot, m)
+    
