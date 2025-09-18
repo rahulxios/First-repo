@@ -32,10 +32,12 @@ def categorize_urls(urls):
             new_url = f"https://www.khanglobalstudies.com/player?src={url}"
             videos.append((name, new_url))
 
-        elif "youtube.com/embed" in url:
-            yt_id = url.split("/")[-1]
-            new_url = f"https://www.youtube.com/watch?v={yt_id}"
-
+        elif "youtu" in url:
+            if "youtube.com/embed" in url:
+                yt_id = url.split("/")[-1]
+                new_url = f"https://www.youtube.com/watch?v={yt_id}"
+            videos.append((name, url))
+            
         elif ".m3u8" in url:
             videos.append((name, url))
         elif ".mp4" in url:
@@ -454,3 +456,8 @@ async def html_handler(bot: Client, message: Message):
     os.remove(file_path)
     os.remove(html_file_path)
     
+#============================================================================================================================
+def register_html_handlers(bot):
+    @bot.on_message(filters.command(["t2h"]))
+    async def call_html_handler(bot: Client, message: Message):
+        await html_handler(bot, message)
