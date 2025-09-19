@@ -428,9 +428,9 @@ async def drm_handler(bot: Client, m: Message):
                         success = False  # To track whether the download was successful
                         failure_msgs = []  # To keep track of failure messages
                         
-                        for attempt in range(max_retries):
+                        for attempt in range(5):
                             try:
-                                await asyncio.sleep(retry_delay)
+                                await asyncio.sleep(3)
                                 url = url.replace(" ", "%20")
                                 scraper = cloudscraper.create_scraper()
                                 response = scraper.get(url)
@@ -438,7 +438,7 @@ async def drm_handler(bot: Client, m: Message):
                                 if response.status_code == 200:
                                     with open(f'{namef}.pdf', 'wb') as file:
                                         file.write(response.content)
-                                    await asyncio.sleep(retry_delay)  # Optional, to prevent spamming
+                                    await asyncio.sleep(2)  # Optional, to prevent spamming
                                     copy = await bot.send_document(chat_id=channel_id, document=f'{namef}.pdf', caption=cc1)
                                     count += 1
                                     os.remove(f'{namef}.pdf')
@@ -451,7 +451,7 @@ async def drm_handler(bot: Client, m: Message):
                             except Exception as e:
                                 failure_msg = await m.reply_text(f"Attempt {attempt + 1}/{max_retries} failed: {str(e)}")
                                 failure_msgs.append(failure_msg)
-                                await asyncio.sleep(retry_delay)
+                                await asyncio.sleep(3)
                                 continue 
                         for msg in failure_msgs:
                             await msg.delete()
