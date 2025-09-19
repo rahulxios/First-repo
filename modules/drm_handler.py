@@ -418,7 +418,7 @@ async def drm_handler(bot: Client, m: Message):
                         os.remove(ka)
                     except FloodWait as e:
                         await m.reply_text(str(e))
-                        time.sleep(5)
+                        time.sleep(2)
                         continue    
   
                 elif "pdf" in url:
@@ -466,7 +466,7 @@ async def drm_handler(bot: Client, m: Message):
                             os.remove(f'{namef}.pdf')
                         except FloodWait as e:
                             await m.reply_text(str(e))
-                            time.sleep(5)
+                            time.sleep(2)
                             continue    
            
                 elif any(ext in url for ext in [".jpg", ".jpeg", ".png"]):
@@ -480,7 +480,7 @@ async def drm_handler(bot: Client, m: Message):
                         os.remove(f'{namef}.{ext}')
                     except FloodWait as e:
                         await m.reply_text(str(e))
-                        time.sleep(5)
+                        time.sleep(2)
                         continue    
 
                 elif any(ext in url for ext in [".mp3", ".wav", ".m4a"]):
@@ -494,7 +494,7 @@ async def drm_handler(bot: Client, m: Message):
                         os.remove(f'{namef}.{ext}')
                     except FloodWait as e:
                         await m.reply_text(str(e))
-                        time.sleep(5)
+                        time.sleep(1)
                         continue    
                     
                 elif 'encrypted.m' in url:    
@@ -540,7 +540,7 @@ async def drm_handler(bot: Client, m: Message):
 
     except Exception as e:
         await m.reply_text(e)
-        time.sleep(2)
+        time.sleep(1)
 
     success_count = len(links) - failed_count
     video_count = v2_count + mpd_count + m3u8_count + yt_count + drm_count + zip_count + other_count
