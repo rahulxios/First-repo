@@ -397,7 +397,8 @@ async def drm_handler(bot: Client, m: Message):
                 Show1 = f"<blockquote>🚀𝐏𝐫𝐨𝐠𝐫𝐞𝐬𝐬 » {progress:.2f}%</blockquote>\n┃\n" \
                         f"┣🔗𝐈𝐧𝐝𝐞𝐱 » {count}/{len(links)}\n┃\n" \
                         f"╰━🖇️𝐑𝐞𝐦𝐚𝐢𝐧 » {remaining_links}\n" \
-                        f"━━━━━━━━━━━━━━━━━━━━━━━━\n" 
+                        f"━━━━━━━━━━━━━━━━━━━━━━━━\n" \
+                        f"<blockquote><b>⚡Dᴏᴡɴʟᴏᴀᴅɪɴɢ Sᴛᴀʀᴛᴇᴅ...⏳</b></blockquote>\n┃\n" \
                         f'┣💃𝐂𝐫𝐞𝐝𝐢𝐭 » {CR}\n┃\n' \
                         f"╰━📚𝐁𝐚𝐭𝐜𝐡 » {b_name}\n" \
                         f"━━━━━━━━━━━━━━━━━━━━━━━━━\n" \
@@ -417,13 +418,13 @@ async def drm_handler(bot: Client, m: Message):
                         os.remove(ka)
                     except FloodWait as e:
                         await m.reply_text(str(e))
-                        time.sleep(5)
+                        time.sleep(e.x)
                         continue    
   
                 elif "pdf" in url:
                     if "cwmediabkt99" in url:
                         max_retries = 15  # Define the maximum number of retries
-                        retry_delay = 1  # Delay between retries in seconds
+                        retry_delay = 4  # Delay between retries in seconds
                         success = False  # To track whether the download was successful
                         failure_msgs = []  # To keep track of failure messages
                         
@@ -465,7 +466,7 @@ async def drm_handler(bot: Client, m: Message):
                             os.remove(f'{namef}.pdf')
                         except FloodWait as e:
                             await m.reply_text(str(e))
-                            time.sleep(5)
+                            time.sleep(10)
                             continue    
            
                 elif any(ext in url for ext in [".jpg", ".jpeg", ".png"]):
@@ -479,7 +480,7 @@ async def drm_handler(bot: Client, m: Message):
                         os.remove(f'{namef}.{ext}')
                     except FloodWait as e:
                         await m.reply_text(str(e))
-                        time.sleep(3)
+                        time.sleep(10)
                         continue    
 
                 elif any(ext in url for ext in [".mp3", ".wav", ".m4a"]):
@@ -493,7 +494,7 @@ async def drm_handler(bot: Client, m: Message):
                         os.remove(f'{namef}.{ext}')
                     except FloodWait as e:
                         await m.reply_text(str(e))
-                        time.sleep(3)
+                        time.sleep(10)
                         continue    
                     
                 elif 'encrypted.m' in url:    
