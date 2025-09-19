@@ -3,235 +3,215 @@ import re
 import sys
 import json
 import time
-import pytz
 import asyncio
 import requests
 import subprocess
-import random
+
+import core as helper
+from utils import progress_bar
+from vars import API_ID as api_id
+from vars import API_HASH as api_hash
+from vars import BOT_TOKEN as bot_token
+from vars import OWNER_ID as owner
+from vars import SUDO_USERS as sudo_users
+
+from aiohttp import ClientSession
 from pyromod import listen
+from subprocess import getstatusoutput
+
 from pyrogram import Client, filters
+from pyrogram.types import Message
+from pyrogram.errors import FloodWait
 from pyrogram.errors.exceptions.bad_request_400 import StickerEmojiInvalid
 from pyrogram.types.messages_and_media import message
-from pyrogram.types import InlineKeyboardButton, InlineKeyboardMarkup, Message, InputMediaPhoto
-# .....,.....,.......,...,.......,....., .....,.....,.......,...,.......,.....,
-import globals
-from logs import logging
-from html_handler import register_html_handlers
-from drm_handler import register_drm_handlers
-from text_handler import register_text_handlers
-from features import register_feature_handlers
-from upgrade import register_upgrade_handlers
-from commands import register_commands_handlers
-from settings import register_settings_handlers
-from broadcast import register_broadcast_handlers
-from youtube_handler import register_youtube_handlers
-from authorisation import register_authorisation_handlers
-from vars import API_ID, API_HASH, BOT_TOKEN, OWNER, CREDIT, AUTH_USERS, TOTAL_USERS, cookies_file_path
-# .....,.....,.......,...,.......,....., .....,.....,.......,...,.......,.....,
+from pyrogram.types import InlineKeyboardButton, InlineKeyboardMarkup
 
-# Initialize the bot
+
 bot = Client(
-    "bot",
-    api_id=API_ID,
-    api_hash=API_HASH,
-    bot_token=BOT_TOKEN
-)
+    name=":memory:",
+    api_id=api_id,
+    api_hash=api_hash,
+    bot_token=bot_token)
 
-# .....,.....,.......,...,.......,....., .....,.....,.......,...,.......,.....,
-keyboard = InlineKeyboardMarkup([
-            [InlineKeyboardButton("✨ Commands", callback_data="cmd_command")],
-            [InlineKeyboardButton("💎 Features", callback_data="feat_command"), InlineKeyboardButton("⚙️ Settings", callback_data="setttings")],
-            [InlineKeyboardButton("💳 Plans", callback_data="upgrade_command")],
-            [InlineKeyboardButton(text="📞 Contact", url=f"tg://openmessage?user_id={OWNER}")],
-        ])      
 
-@bot.on_message(filters.command("start"))
-async def start(bot, m: Message):
-    user_id = m.chat.id
-    if user_id not in TOTAL_USERS:
-        TOTAL_USERS.append(user_id)
-    user = await bot.get_me()
-    mention = user.mention
-    if m.chat.id in AUTH_USERS:
-        caption = (
-            f"🌟 Welcome {m.from_user.first_name}! 🌟\n\n"
-            f"Great! You are a premium member!\n"
-            f"Use button: **✨ Commands** to get started 🌟\n\n"
-            f"If you face any problem contact - [{CREDIT}](tg://openmessage?user_id={OWNER})\n"
-        )
-    else:
-        caption = (
-            f"🎉 Welcome {m.from_user.first_name} to DRM Bot! 🎉\n\n"
-            f"**You are currently using the free version.** 🆓\n\n"
-            f"I'm here to make your life easier by downloading videos from your **.txt** file 📄 and uploading them directly to Telegram!\n\n"
-            f"**Want to get started? Press /id**\n\n"
-            f"💬 Contact: [{CREDIT}](tg://openmessage?user_id={OWNER}) to Get The Subscription 🎫 and unlock the full potential of your new bot! 🔓\n"
-        )
-    await bot.send_photo(
-        chat_id=m.chat.id,
-        photo="https://i.postimg.cc/pT8MFMF2/backiee-330776-landscape.jpg",
-        caption=caption,
-        reply_markup=keyboard
-    )
-    
-# .....,.....,.......,...,.......,....., .....,.....,.......,...,.......,.....,
-@bot.on_callback_query(filters.regex("back_to_main_menu"))
-async def back_to_main_menu(client, callback_query):
-    user_id = callback_query.from_user.id
-    first_name = callback_query.from_user.first_name
-    caption = f"✨ **Welcome [{first_name}](tg://user?id={user_id}) in My uploader bot**"
-    
-    await callback_query.message.edit_media(
-      InputMediaPhoto(
-        media="https://i.postimg.cc/pT8MFMF2/backiee-330776-landscape.jpg",
-        caption=caption
-      ),
-      reply_markup=keyboard
-    )
-    await callback_query.answer()  
+@bot.on_message(filters.command(["start"]))
+async def account_login(bot: Client, m: Message):
+    editable = await m.reply_text("BOT MADE BY - 𓊈𒆜🅲🆁🅰🆉🆈_🅼🅸🅽🅳𒆜𓊉\n\n I am a Bot For Download Links From Your **TXT** File And Then Upload That File On Telegram")
 
-# .....,.....,.......,...,.......,....., .....,.....,.......,...,.......,.....,
-# .....,.....,.......,...,.......,....., .....,.....,.......,...,.......,.....,
 
-@bot.on_message(filters.command(["id"]))
-async def id_command(client, message: Message):
-    keyboard = InlineKeyboardMarkup([[InlineKeyboardButton(text="Send to Owner", url=f"tg://openmessage?user_id={OWNER}")]])
-    chat_id = message.chat.id
-    text = f"<blockquote expandable><b>The ID of this chat id is:</b></blockquote>\n`{chat_id}`"
-    
-    if str(chat_id).startswith("-100"):
-        await message.reply_text(text)
-    else:
-        await message.reply_text(text, reply_markup=keyboard)
-
-# .....,.....,.......,...,.......,....., .....,.....,.......,...,.......,.....,
-
-@bot.on_message(filters.private & filters.command(["info"]))
-async def info(bot: Client, update: Message):
-    keyboard = InlineKeyboardMarkup([[InlineKeyboardButton(text="📞 Contact", url=f"tg://openmessage?user_id={OWNER}")]])
-    text = (
-        f"╭────────────────╮\n"
-        f"│✨ **Your Telegram Info**✨ \n"
-        f"├────────────────\n"
-        f"├🔹**Name :** `{update.from_user.first_name} {update.from_user.last_name if update.from_user.last_name else 'None'}`\n"
-        f"├🔹**User ID :** @{update.from_user.username}\n"
-        f"├🔹**TG ID :** `{update.from_user.id}`\n"
-        f"├🔹**Profile :** {update.from_user.mention}\n"
-        f"╰────────────────╯"
-    )    
-    await update.reply_text(        
-        text=text,
-        disable_web_page_preview=True,
-        reply_markup=keyboard
-    )
-
-# .....,.....,.......,...,.......,....., .....,.....,.......,...,.......,.....,
-@bot.on_message(filters.command(["logs"]))
-async def send_logs(client: Client, m: Message):  # Correct parameter name
-    try:
-        with open("logs.txt", "rb") as file:
-            sent = await m.reply_text("**📤 Sending you ....**")
-            await m.reply_document(document=file)
-            await sent.delete()
-    except Exception as e:
-        await m.reply_text(f"**Error sending logs:**\n<blockquote>{e}</blockquote>")
-
-# .....,.....,.......,...,.......,....., .....,.....,.......,...,.......,.....,
-@bot.on_message(filters.command(["reset"]))
+@bot.on_message(filters.command("stop"))
 async def restart_handler(_, m):
-    if m.chat.id != OWNER:
-        return
-    else:
-        await m.reply_text("𝐁𝐨𝐭 𝐢𝐬 𝐑𝐞𝐬𝐞𝐭𝐢𝐧𝐠...", True)
-        os.execl(sys.executable, sys.executable, *sys.argv)
-
-# .....,.....,.......,...,.......,....., .....,.....,.......,...,.......,.....,
-@bot.on_message(filters.command("stop") & filters.private)
-async def cancel_handler(client: Client, m: Message):
-    if m.chat.id not in AUTH_USERS:
-        print(f"User ID not in AUTH_USERS", m.chat.id)
-        await bot.send_message(
-            m.chat.id, 
-            f"<blockquote>__**Oopss! You are not a Premium member**__\n"
-            f"__**PLEASE /upgrade YOUR PLAN**__\n"
-            f"__**Send me your user id for authorization**__\n"
-            f"__**Your User id** __- `{m.chat.id}`</blockquote>\n\n"
-        )
-    else:
-        if globals.processing_request:
-            globals.cancel_requested = True
-            await m.delete()
-            cancel_message = await m.reply_text("**🚦 Process cancel request received. Stopping after current process...**")
-            await asyncio.sleep(30)  # 30 second wait
-            await cancel_message.delete()
-        else:
-            await m.reply_text("**⚡ No active process to cancel.**")
+    await m.reply_text("**Stopped**🚦", True)
+    os.execl(sys.executable, sys.executable, *sys.argv)
 
 
-#=================================================================
 
-register_text_handlers(bot)
-register_html_handlers(bot)
-register_feature_handlers(bot)
-register_settings_handlers(bot)
-register_upgrade_handlers(bot)
-register_commands_handlers(bot)
-register_broadcast_handlers(bot)
-register_youtube_handlers(bot)
-register_authorisation_handlers(bot)
-register_drm_handlers(bot)
-#==================================================================
+@bot.on_message(filters.command(["upload"]))
+async def account_login(bot: Client, m: Message):
+    editable = await m.reply_text('SEND ME TXT FILE TO DOWNLOAD')
+    input: Message = await bot.listen(editable.chat.id)
+    x = await input.download()
+    await input.delete(True)
 
-def notify_owner():
-    url = f"https://api.telegram.org/bot{BOT_TOKEN}/sendMessage"
-    data = {
-        "chat_id": OWNER,
-        "text": "𝐁𝐨𝐭 𝐑𝐞𝐬𝐭𝐚𝐫𝐭𝐞𝐝 𝐒𝐮𝐜𝐜𝐞𝐬𝐬𝐟𝐮𝐥𝐥𝐲 ✅"
-    }
-    requests.post(url, data=data)
+    path = f"./downloads/{m.chat.id}"
 
-def reset_and_set_commands():
-    url = f"https://api.telegram.org/bot{BOT_TOKEN}/setMyCommands"
-
-    # General users ke liye commands
-    general_commands = [
-        {"command": "start", "description": "✅ Check Alive the Bot"},
-        {"command": "stop", "description": "🚫 Stop the ongoing process"},
-        {"command": "id", "description": "🆔 Get Your ID"},
-        {"command": "info", "description": "ℹ️ Check Your Information"},
-        {"command": "cookies", "description": "📁 Upload YT Cookies"},
-        {"command": "y2t", "description": "🔪 YouTube → .txt Converter"},
-        {"command": "ytm", "description": "🎶 YouTube → .mp3 downloader"},
-        {"command": "t2t", "description": "📟 Text → .txt Generator"},
-        {"command": "t2h", "description": "🌐 .txt → .html Converter"},
-        {"command": "logs", "description": "👁️ View Bot Activity"},
-    ]
-    # Owner ke liye extra commands
-    owner_commands = general_commands + [
-        {"command": "broadcast", "description": "📢 Broadcast to All Users"},
-        {"command": "broadusers", "description": "👨‍❤️‍👨 All Broadcasting Users"},
-        {"command": "addauth", "description": "▶️ Add Authorisation"},
-        {"command": "rmauth", "description": "⏸️ Remove Authorisation "},
-        {"command": "users", "description": "👨‍👨‍👧‍👦 All Premium Users"},
-        {"command": "reset", "description": "✅ Reset the Bot"}
-    ]
-
-    # General users ke liye set commands (scope default)
-    requests.post(url, json={
-        "commands": general_commands,
-        "scope": {"type": "default"},
-        "language_code": "en"
-    })
-
-    # Owner ke liye set commands (scope user)
-    requests.post(url, json={
-        "commands": owner_commands,
-        "scope": {"type": "chat", "chat_id": OWNER},  # OWNER variable me chat id hona chahiye
-        "language_code": "en"
-    })
+    try:
+       with open(x, "r") as f:
+           content = f.read()
+       content = content.split("\n")
+       links = []
+       for i in content:
+           links.append(i.split("://", 1))
+       os.remove(x)
+            # print(len(links)
+    except:
+           await m.reply_text("**Invalid file input.**")
+           os.remove(x)
+           return
     
-if __name__ == "__main__":
-    reset_and_set_commands()
-    notify_owner() 
+   
+    await editable.edit(f"Total Links **{len(links)}**\n\nLike **1**")
+    input0: Message = await bot.listen(editable.chat.id)
+    raw_text = input0.text
+    await input0.delete(True)
+
+    await editable.edit("**Now Please Send Me Your Batch Name**")
+    input1: Message = await bot.listen(editable.chat.id)
+    raw_text0 = input1.text
+    await input1.delete(True)
+    
+
+    await editable.edit("**Quality**\n144,240,360,480,720,1080 please choose quality")
+    input2: Message = await bot.listen(editable.chat.id)
+    raw_text2 = input2.text
+    await input2.delete(True)
+    try:
+        if raw_text2 == "144":
+            res = "256x144"
+        elif raw_text2 == "240":
+            res = "426x240"
+        elif raw_text2 == "360":
+            res = "640x360"
+        elif raw_text2 == "480":
+            res = "854x480"
+        elif raw_text2 == "720":
+            res = "1280x720"
+        elif raw_text2 == "1080":
+            res = "1920x1080"
+        else: 
+            res = "UN"
+    except Exception:
+            res = "UN"
+    
+    
+
+    await editable.edit("**Download By -  **")
+    input3: Message = await bot.listen(editable.chat.id)
+    raw_text3 = input3.text
+    await input3.delete(True)
+    highlighter  = f"️ ⁪⁬⁮⁮⁮"
+    if raw_text3 == 'Robin':
+        MR = highlighter 
+    else:
+        MR = raw_text3
+   
+    await editable.edit("Now send the Thumb url/nEg » https://graph.org/file/eb18b59310300916efdd0.jpg \n Or if don't want thumbnail send = no")
+    input6 = message = await bot.listen(editable.chat.id)
+    raw_text6 = input6.text
+    await input6.delete(True)
+    await editable.delete()
+
+    thumb = input6.text
+    if thumb.startswith("http://") or thumb.startswith("https://"):
+        getstatusoutput(f"wget '{thumb}' -O 'thumb.jpg'")
+        thumb = "thumb.jpg"
+    else:
+        thumb == "no"
+
+    if len(links) == 1:
+        count = 1
+    else:
+        count = int(raw_text)
+
+    try:
+        for i in range(count - 1, len(links)):
+
+            V = links[i][1].replace("file/d/","uc?export=download&id=").replace("www.youtube-nocookie.com/embed", "youtu.be").replace("?modestbranding=1", "").replace("/view?usp=sharing","") # .replace("mpd","m3u8")
+            url = "https://" + V
+
+            if "visionias" in url:
+                async with ClientSession() as session:
+                    async with session.get(url, headers={'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9', 'Accept-Language': 'en-US,en;q=0.9', 'Cache-Control': 'no-cache', 'Connection': 'keep-alive', 'Pragma': 'no-cache', 'Referer': 'http://www.visionias.in/', 'Sec-Fetch-Dest': 'iframe', 'Sec-Fetch-Mode': 'navigate', 'Sec-Fetch-Site': 'cross-site', 'Upgrade-Insecure-Requests': '1', 'User-Agent': 'Mozilla/5.0 (Linux; Android 12; RMX2121) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/107.0.0.0 Mobile Safari/537.36', 'sec-ch-ua': '"Chromium";v="107", "Not=A?Brand";v="24"', 'sec-ch-ua-mobile': '?1', 'sec-ch-ua-platform': '"Android"',}) as resp:
+                        text = await resp.text()
+                        url = re.search(r"(https://.*?playlist.m3u8.*?)\"", text).group(1)
+
+            elif 'videos.classplusapp' in url:
+             url = requests.get(f'https://api.classplusapp.com/cams/uploader/video/jw-signed-url?url={url}', headers={'x-access-token': 'eyJhbGciOiJIUzM4NCIsInR5cCI6IkpXVCJ9.eyJpZCI6MzgzNjkyMTIsIm9yZ0lkIjoyNjA1LCJ0eXBlIjoxLCJtb2JpbGUiOiI5MTcwODI3NzQyODkiLCJuYW1lIjoiQWNlIiwiZW1haWwiOm51bGwsImlzRmlyc3RMb2dpbiI6dHJ1ZSwiZGVmYXVsdExhbmd1YWdlIjpudWxsLCJjb3VudHJ5Q29kZSI6IklOIiwiaXNJbnRlcm5hdGlvbmFsIjowLCJpYXQiOjE2NDMyODE4NzcsImV4cCI6MTY0Mzg4NjY3N30.hM33P2ai6ivdzxPPfm01LAd4JWv-vnrSxGXqvCirCSpUfhhofpeqyeHPxtstXwe0'}).json()['url']
+
+            elif '/master.mpd' in url:
+             id =  url.split("/")[-2]
+             url =  "https://psitoffers.store/testkey.php?vid=" + id + "&quality=" + "raw_text2"
+
+            name1 = links[i][0].replace("\t", "").replace(":", "").replace("/", "").replace("+", "").replace("#", "").replace("|", "").replace("@", "").replace("*", "").replace(".", "").replace("https", "").replace("http", "").strip()
+            name = f'{str(count).zfill(3)}) {name1[:60]}'
+
+            if "youtu" in url:
+                ytf = f"b[height<={raw_text2}][ext=mp4]/bv[height<={raw_text2}][ext=mp4]+ba[ext=m4a]/b[ext=mp4]"
+            else:
+                ytf = f"b[height<={raw_text2}]/bv[height<={raw_text2}]+ba/b/bv+ba"
+
+            if "jw-prod" in url:
+                cmd = f'yt-dlp -o "{name}.mp4" "{url}"'
+            else:
+                cmd = f'yt-dlp -f "{ytf}" "{url}" -o "{name}.mp4"'
+
+            try:  
+                
+                cc = f'**[📽️] Vid_ID:** {str(count).zfill(3)}\n\n**Title  »** {name1} {res} 🅲🆁🅰🆉🆈_🅼🅸🅽🅳.mkv\n\n**Batch »** {raw_text0}\n\n**Download by »** {raw_text3}\n\n'
+                cc1 = f'**[📁] Pdf_ID:** {str(count).zfill(3)}\n\n**Title »** {name1} 🅲🆁🅰🆉🆈_🅼🅸🅽🅳.pdf \n\n**Batch »** {raw_text0}\n\n**Download by »** {raw_text3}\n\n'
+                if "drive" in url:
+                    try:
+                        ka = await helper.download(url, name)
+                        copy = await bot.send_document(chat_id=m.chat.id,document=ka, caption=cc1)
+                        count+=1
+                        os.remove(ka)
+                        time.sleep(1)
+                    except FloodWait as e:
+                        await m.reply_text(str(e))
+                        time.sleep(e.x)
+                        continue
+                
+                elif ".pdf" in url:
+                    try:
+                        cmd = f'yt-dlp -o "{name}.pdf" "{url}"'
+                        download_cmd = f"{cmd} -R 25 --fragment-retries 25"
+                        os.system(download_cmd)
+                        copy = await bot.send_document(chat_id=m.chat.id, document=f'{name}.pdf', caption=cc1)
+                        count += 1
+                        os.remove(f'{name}.pdf')
+                    except FloodWait as e:
+                        await m.reply_text(str(e))
+                        time.sleep(e.x)
+                        continue
+                else:
+                    Show = f"** ⬇️⬇️🄳🄾🅆🄽🄻🄾🄰🄳🄸🄽🄶⬇️⬇️**\n\n**📝Name »** `{name}\n❄Quality » {raw_text2}`\n\n**🔗URL »** `{url}`"
+                    prog = await m.reply_text(Show)
+                    res_file = await helper.download_video(url, cmd, name)
+                    filename = res_file
+                    await prog.delete(True)
+                    await helper.send_vid(bot, m, cc, filename, thumb, name, prog)
+                    count += 1
+                    time.sleep(1)
+
+            except Exception as e:
+                await m.reply_text(
+                    f"**downloading Interupted **\n{str(e)}\n**Name** » {name}\n**Link** » `{url}`"
+                )
+                continue
+
+    except Exception as e:
+        await m.reply_text(e)
+    await m.reply_text("Mission Successful")
+
 
 bot.run()
