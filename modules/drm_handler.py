@@ -418,7 +418,7 @@ async def drm_handler(bot: Client, m: Message):
                         os.remove(ka)
                     except FloodWait as e:
                         await m.reply_text(str(e))
-                        time.sleep(0.5)
+                        time.sleep(0)
                         continue    
   
                 elif "pdf" in url:
@@ -428,9 +428,9 @@ async def drm_handler(bot: Client, m: Message):
                         success = False  # To track whether the download was successful
                         failure_msgs = []  # To keep track of failure messages
                         
-                        for attempt in range(1):
+                        for attempt in range(0):
                             try:
-                                await asyncio.sleep(0.5)
+                                await asyncio.sleep(0)
                                 url = url.replace(" ", "%20")
                                 scraper = cloudscraper.create_scraper(0.5)
                                 response = scraper.get(url)
@@ -438,7 +438,7 @@ async def drm_handler(bot: Client, m: Message):
                                 if response.status_code == 200:
                                     with open(f'{namef}.pdf', 'wb') as file:
                                         file.write(response.content)
-                                    await asyncio.sleep(0.5)  # Optional, to prevent spamming
+                                    await asyncio.sleep(0)  # Optional, to prevent spamming
                                     copy = await bot.send_document(chat_id=channel_id, document=f'{namef}.pdf', caption=cc1)
                                     count += 1
                                     os.remove(f'{namef}.pdf')
@@ -451,7 +451,7 @@ async def drm_handler(bot: Client, m: Message):
                             except Exception as e:
                                 failure_msg = await m.reply_text(f"Attempt {attempt + 1}/{max_retries} failed: {str(e)}")
                                 failure_msgs.append(failure_msg)
-                                await asyncio.sleep(0.5)
+                                await asyncio.sleep(0)
                                 continue 
                         for msg in failure_msgs:
                             await msg.delete()
@@ -466,7 +466,7 @@ async def drm_handler(bot: Client, m: Message):
                             os.remove(f'{namef}.pdf')
                         except FloodWait as e:
                             await m.reply_text(str(e))
-                            time.sleep(0.5)
+                            time.sleep(0)
                             continue    
            
                 elif any(ext in url for ext in [".jpg", ".jpeg", ".png"]):
@@ -480,7 +480,7 @@ async def drm_handler(bot: Client, m: Message):
                         os.remove(f'{namef}.{ext}')
                     except FloodWait as e:
                         await m.reply_text(str(e))
-                        time.sleep(0.5)
+                        time.sleep(0)
                         continue    
 
                 elif any(ext in url for ext in [".mp3", ".wav", ".m4a"]):
@@ -494,7 +494,7 @@ async def drm_handler(bot: Client, m: Message):
                         os.remove(f'{namef}.{ext}')
                     except FloodWait as e:
                         await m.reply_text(str(e))
-                        time.sleep(1)
+                        time.sleep(0)
                         continue    
                     
                 elif 'encrypted.m' in url:    
@@ -506,7 +506,7 @@ async def drm_handler(bot: Client, m: Message):
                     await prog.delete(True)
                     await helper.send_vid(bot, m, cc, filename, vidwatermark, thumb, name, prog, channel_id)
                     count += 1  
-                    await asyncio.sleep(0.5)  
+                    await asyncio.sleep(0)  
                     continue  
 
                 elif 'drmcdni' in url or 'drm/wv' in url or 'drm/common' in url:
@@ -518,7 +518,7 @@ async def drm_handler(bot: Client, m: Message):
                     await prog.delete(True)
                     await helper.send_vid(bot, m, cc, filename, vidwatermark, thumb, name, prog, channel_id)
                     count += 1
-                    await asyncio.sleep(0.5)
+                    await asyncio.sleep(0)
                     continue
      
                 else:
@@ -530,7 +530,7 @@ async def drm_handler(bot: Client, m: Message):
                     await prog.delete(True)
                     await helper.send_vid(bot, m, cc, filename, vidwatermark, thumb, name, prog, channel_id)
                     count += 1
-                    time.sleep(1)
+                    time.sleep(0)
                 
             except Exception as e:
                 await bot.send_message(channel_id, f'⚠️**Downloading Failed**⚠️\n**Name** =>> `{str(count).zfill(3)} {name1}`\n**Url** =>> {url}\n\n<blockquote expandable><i><b>Failed Reason: {str(e)}</b></i></blockquote>', disable_web_page_preview=True)
@@ -540,7 +540,7 @@ async def drm_handler(bot: Client, m: Message):
 
     except Exception as e:
         await m.reply_text(e)
-        time.sleep(0.5)
+        time.sleep(0)
 
     success_count = len(links) - failed_count
     video_count = v2_count + mpd_count + m3u8_count + yt_count + drm_count + zip_count + other_count
