@@ -390,7 +390,24 @@ async def drm_handler(bot: Client, m: Message):
                             ccimg = f'<b>{str(count).zfill(3)}.</b> {name1} .jpg'
                             ccm = f'<b>{str(count).zfill(3)}.</b> {name1} .mp3'
                             cchtml = f'<b>{str(count).zfill(3)}.</b> {name1} .html'
-#.......................................................................................................................................................................................
+#........................................................................................................................................................................................
+                remaining_links = len(links) - count
+                progress = (count / len(links)) * 100
+                Show = f"<i><b>Video Downloading</b></i>\n<blockquote><b>{str(count).zfill(3)}) {name1}</b></blockquote>" 
+                Show1 = f"<blockquote>🚀𝐏𝐫𝐨𝐠𝐫𝐞𝐬𝐬 » {progress:.2f}%</blockquote>\n┃\n" \
+                        f"┣🔗𝐈𝐧𝐝𝐞𝐱 » {count}/{len(links)}\n┃\n" \
+                        f"╰━🖇️𝐑𝐞𝐦𝐚𝐢𝐧 » {remaining_links}\n" \
+                        f"━━━━━━━━━━━━━━━━━━━━━━━━\n" 
+                        f'┣💃𝐂𝐫𝐞𝐝𝐢𝐭 » {CR}\n┃\n' \
+                        f"╰━📚𝐁𝐚𝐭𝐜𝐡 » {b_name}\n" \
+                        f"━━━━━━━━━━━━━━━━━━━━━━━━━\n" \
+                        f"<blockquote>📚𝐓𝐢𝐭𝐥𝐞 » {namef}</blockquote>\n┃\n" \
+                        f"┣🍁𝐐𝐮𝐚𝐥𝐢𝐭𝐲 » {quality}\n┃\n" \
+                        f'┣━🔗𝐋𝐢𝐧𝐤 » <a href="{link0}">**Original Link**</a>\n┃\n' \
+                        f'╰━━🖇️𝐔𝐫𝐥 » <a href="{url}">**Api Link**</a>\n' \
+                        f"━━━━━━━━━━━━━━━━━━━━━━━━━\n" \
+                        f"🛑**Send** /stop **to stop process**\n┃\n" \
+                        f"╰━✦𝐁𝐨𝐭 𝐌𝐚𝐝𝐞 𝐁𝐲 ✦ {CREDIT}"
 #........................................................................................................................................................................................           
                 if "drive" in url:
                     try:
@@ -400,13 +417,13 @@ async def drm_handler(bot: Client, m: Message):
                         os.remove(ka)
                     except FloodWait as e:
                         await m.reply_text(str(e))
-                        time.sleep(e.x)
+                        time.sleep(5)
                         continue    
   
                 elif "pdf" in url:
                     if "cwmediabkt99" in url:
                         max_retries = 15  # Define the maximum number of retries
-                        retry_delay = 4  # Delay between retries in seconds
+                        retry_delay = 1  # Delay between retries in seconds
                         success = False  # To track whether the download was successful
                         failure_msgs = []  # To keep track of failure messages
                         
@@ -448,7 +465,7 @@ async def drm_handler(bot: Client, m: Message):
                             os.remove(f'{namef}.pdf')
                         except FloodWait as e:
                             await m.reply_text(str(e))
-                            time.sleep(e.x)
+                            time.sleep(5)
                             continue    
            
                 elif any(ext in url for ext in [".jpg", ".jpeg", ".png"]):
@@ -462,7 +479,7 @@ async def drm_handler(bot: Client, m: Message):
                         os.remove(f'{namef}.{ext}')
                     except FloodWait as e:
                         await m.reply_text(str(e))
-                        time.sleep(e.x)
+                        time.sleep(3)
                         continue    
 
                 elif any(ext in url for ext in [".mp3", ".wav", ".m4a"]):
@@ -476,7 +493,7 @@ async def drm_handler(bot: Client, m: Message):
                         os.remove(f'{namef}.{ext}')
                     except FloodWait as e:
                         await m.reply_text(str(e))
-                        time.sleep(e.x)
+                        time.sleep(3)
                         continue    
                     
                 elif 'encrypted.m' in url:    
