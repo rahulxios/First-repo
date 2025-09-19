@@ -428,9 +428,9 @@ async def drm_handler(bot: Client, m: Message):
                         success = False  # To track whether the download was successful
                         failure_msgs = []  # To keep track of failure messages
                         
-                        for attempt in range(max_retries):
+                        for attempt in range(3):
                             try:
-                                await asyncio.sleep(3)
+                                await asyncio.sleep(2)
                                 url = url.replace(" ", "%20")
                                 scraper = cloudscraper.create_scraper()
                                 response = scraper.get(url)
