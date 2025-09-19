@@ -428,7 +428,7 @@ async def drm_handler(bot: Client, m: Message):
                         success = False  # To track whether the download was successful
                         failure_msgs = []  # To keep track of failure messages
                         
-                        for attempt in range(5):
+                        for attempt in range(max_retries):
                             try:
                                 await asyncio.sleep(3)
                                 url = url.replace(" ", "%20")
