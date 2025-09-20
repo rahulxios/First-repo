@@ -236,7 +236,7 @@ async def download_video(url,cmd, name):
     k = subprocess.run(download_cmd, shell=True)
     if "visionias" in cmd and k.returncode != 0 and failed_counter <= 10:
         failed_counter += 1
-        await asyncio.sleep(1)
+        await asyncio.sleep(0.1)
         await download_video(url, cmd, name)
     failed_counter = 0
     try:
@@ -259,14 +259,14 @@ async def download_video(url,cmd, name):
 
 async def send_doc(bot: Client, m: Message, cc, ka, cc1, prog, count, name, channel_id):
     reply = await bot.send_message(channel_id, f"Downloading pdf:\n<pre><code>{name}</code></pre>")
-    time.sleep(0.5)
+    time.sleep(0.1)
     start_time = time.time()
     await bot.send_document(ka, caption=cc1)
     count+=1
     await reply.delete (True)
-    time.sleep(0.5)
+    time.sleep(0.1)
     os.remove(ka)
-    time.sleep(0.5) 
+    time.sleep(0.1) 
 
 
 def decrypt_file(file_path, key):  
